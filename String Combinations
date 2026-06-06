@@ -1,0 +1,24 @@
+import java.util.*;
+
+public class StrCom {
+    public static void combination(String prefix, String str) {
+        if (str.length() == 0) {
+            System.out.println(prefix);
+            return;
+        }
+
+        for (int i = 0; i < str.length(); i++) {
+            combination(prefix + str.charAt(i),
+                    str.substring(0, i) + str.substring(i + 1));
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Enter a string:");
+        String str = sc.nextLine();
+
+        combination("", str);
+    }
+}
