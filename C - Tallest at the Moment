@@ -1,0 +1,71 @@
+import java.util.*;
+
+public class Main {
+
+    static class Person {
+
+        int height;
+        int leave;
+
+        Person(int height, int leave) {
+            this.height = height;
+            this.leave = leave;
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+
+        ArrayList<Person> people = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+
+            int h = sc.nextInt();
+            int l = sc.nextInt();
+
+            /*
+             * If the previous person is shorter
+             * and leaves earlier, that person is useless.
+             */
+            while (!people.isEmpty() &&
+                   people.get(people.size() - 1).height <= h) {
+
+                people.remove(people.size() - 1);
+            }
+
+            people.add(new Person(h, l));
+        }
+
+        int q = sc.nextInt();
+
+        while (q-- > 0) {
+
+            int t = sc.nextInt();
+
+            int low = 0;
+            int high = people.size();
+
+            /*
+             * Find the first person whose leaving time
+             * is greater than t.
+             */
+            while (low < high) {
+
+                int mid = (low + high) / 2;
+
+                if (people.get(mid).leave > t) {
+                    high = mid;
+                } else {
+                    low = mid + 1;
+                }
+            }
+
+            System.out.println(people.get(low).height);
+        }
+
+        sc.close();
+    }
+}
