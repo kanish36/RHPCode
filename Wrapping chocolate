@@ -1,0 +1,107 @@
+import java.io.*;
+import java.util.*;
+
+public class program8 {
+
+    static class Item {
+        long a, b;
+
+        Item(long a, long b) {
+            this.a = a;
+            this.b = b;
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+
+        BufferedReader br = new BufferedReader(
+                new InputStreamReader(System.in)
+        );
+
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+
+        long[] A = new long[N];
+        long[] B = new long[N];
+        long[] C = new long[M];
+        long[] D = new long[M];
+
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N; i++) {
+            A[i] = Long.parseLong(st.nextToken());
+        }
+
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N; i++) {
+            B[i] = Long.parseLong(st.nextToken());
+        }
+
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < M; i++) {
+            C[i] = Long.parseLong(st.nextToken());
+        }
+
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < M; i++) {
+            D[i] = Long.parseLong(st.nextToken());
+        }
+
+        Item[] chocolates = new Item[N];
+        Item[] boxes = new Item[M];
+
+        for (int i = 0; i < N; i++) {
+            chocolates[i] = new Item(A[i], B[i]);
+        }
+
+        for (int i = 0; i < M; i++) {
+            boxes[i] = new Item(C[i], D[i]);
+        }
+
+        // Sort by first dimension in descending order
+        Arrays.sort(chocolates, (x, y) ->
+                Long.compare(y.a, x.a));
+
+        Arrays.sort(boxes, (x, y) ->
+                Long.compare(y.a, x.a));
+
+        // Stores second dimensions of available boxes
+        TreeMap<Long, Integer> map = new TreeMap<>();
+
+        int j = 0;
+
+        for (int i = 0; i < N; i++) {
+
+            // Add all boxes that can fit the chocolate vertically
+            while (j < M && boxes[j].a >= chocolates[i].a) {
+
+                map.put(
+                    boxes[j].b,
+                    map.getOrDefault(boxes[j].b, 0) + 1
+                );
+
+                j++;
+            }
+
+            // Find the smallest box width >= chocolate width
+            Long key = map.ceilingKey(chocolates[i].b);
+
+            if (key == null) {
+                System.out.println("No");
+                return;
+            }
+
+            // Use this box
+            int count = map.get(key);
+
+            if (count == 1) {
+                map.remove(key);
+            } else {
+                map.put(key, count - 1);
+            }
+        }
+
+        System.out.println("Yes");
+    }
+}
