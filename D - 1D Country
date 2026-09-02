@@ -1,0 +1,74 @@
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+
+        int[] x = new int[n];
+        long[] prefix = new long[n + 1];
+
+        for (int i = 0; i < n; i++) {
+            x[i] = sc.nextInt();
+            long population = sc.nextLong();
+
+            prefix[i + 1] = prefix[i] + population;
+        }
+
+        int q = sc.nextInt();
+
+        while (q-- > 0) {
+
+            int l = sc.nextInt();
+            int r = sc.nextInt();
+
+            int left = lowerBound(x, l);
+            int right = upperBound(x, r);
+
+            System.out.println(prefix[right] - prefix[left]);
+        }
+
+        sc.close();
+    }
+
+    // First position >= target
+    static int lowerBound(int[] arr, int target) {
+
+        int low = 0;
+        int high = arr.length;
+
+        while (low < high) {
+
+            int mid = (low + high) / 2;
+
+            if (arr[mid] >= target)
+                high = mid;
+            else
+                low = mid + 1;
+        }
+
+        return low;
+    }
+
+    // First position > target
+    static int upperBound(int[] arr, int target) {
+
+        int low = 0;
+        int high = arr.length;
+
+        while (low < high) {
+
+            int mid = (low + high) / 2;
+
+            if (arr[mid] > target)
+                high = mid;
+            else
+                low = mid + 1;
+        }
+
+        return low;
+    }
+}
