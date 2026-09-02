@@ -1,0 +1,41 @@
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int t = sc.nextInt();
+
+        while (t-- > 0) {
+
+            int n = sc.nextInt();
+
+            long sum = 0;
+            boolean possible = true;
+
+            for (int i = 1; i <= n; i++) {
+
+                long books = sc.nextLong();
+
+                sum += books;
+
+                // Minimum books needed in first i stacks:
+                // 1 + 2 + 3 + ... + i
+                long required = (long) i * (i + 1) / 2;
+
+                if (sum < required) {
+                    possible = false;
+                }
+            }
+
+            if (possible)
+                System.out.println("YES");
+            else
+                System.out.println("NO");
+        }
+
+        sc.close();
+    }
+}
