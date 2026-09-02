@@ -1,0 +1,59 @@
+import java.util.*;
+
+class NearestExit {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+
+        char[][] maze = new char[n][m];
+
+        for (int i = 0; i < n; i++) {
+            String s = sc.next();
+            maze[i] = s.toCharArray();
+        }
+
+        int sr = sc.nextInt();
+        int sc1 = sc.nextInt();
+
+        Queue<int[]> q = new LinkedList<>();
+        q.add(new int[]{sr, sc1, 0});
+
+        maze[sr][sc1] = '+';
+
+        int[][] dir = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+
+        while (!q.isEmpty()) {
+            int[] cur = q.poll();
+
+            int r = cur[0];
+            int c = cur[1];
+            int dist = cur[2];
+
+            for (int[] d : dir) {
+                int nr = r + d[0];
+                int nc = c + d[1];
+
+                if (nr < 0 || nr >= n || nc < 0 || nc >= m) {
+                    continue;
+                }
+
+                if (maze[nr][nc] == '.') {
+
+                    if (nr == 0 || nr == n - 1 ||
+                        nc == 0 || nc == m - 1) {
+
+                        System.out.println(dist + 1);
+                        return;
+                    }
+
+                    maze[nr][nc] = '+';
+                    q.add(new int[]{nr, nc, dist + 1});
+                }
+            }
+        }
+
+        System.out.println(-1);
+    }
+}
