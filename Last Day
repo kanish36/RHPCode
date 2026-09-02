@@ -1,0 +1,104 @@
+import java.util.*;
+
+public class Main {
+
+    static int rows;
+    static int cols;
+
+    static int[][] cells;
+
+    static int[] dr = {1, -1, 0, 0};
+    static int[] dc = {0, 0, 1, -1};
+
+    static boolean canCross(int day) {
+
+        boolean[][] blocked = new boolean[rows][cols];
+
+        for (int i = 0; i < day; i++) {
+
+            int r = cells[i][0];
+            int c = cells[i][1];
+
+            blocked[r][c] = true;
+        }
+
+        Queue<int[]> queue = new LinkedList<>();
+
+        boolean[][] visited = new boolean[rows][cols];
+
+        // Start from every open cell in the first row
+        for (int c = 0; c < cols; c++) {
+
+            if (!blocked[0][c]) {
+
+                queue.add(new int[]{0, c});
+                visited[0][c] = true;
+            }
+        }
+
+        while (!queue.isEmpty()) {
+
+            int[] current = queue.poll();
+
+            int r = current[0];
+            int c = current[1];
+
+            if (r == rows - 1)
+                return true;
+
+            for (int d = 0; d < 4; d++) {
+
+                int nr = r + dr[d];
+                int nc = c + dc[d];
+
+                if (nr >= 0 && nr < rows &&
+                    nc >= 0 && nc < cols &&
+                    !blocked[nr][nc] &&
+                    !visited[nr][nc]) {
+
+                    visited[nr][nc] = true;
+
+                    queue.add(new int[]{nr, nc});
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        rows = sc.nextInt();
+        cols = sc.nextInt();
+
+        int n = sc.nextInt();
+
+        cells = new int[n][2];
+
+        for (int i = 0; i < n; i++) {
+
+            cells[i][0] = sc.nextInt() - 1;
+            cells[i][1] = sc.nextInt() - 1;
+        }
+
+        int low = 0;
+        int high = n;
+
+        while (low < high) {
+
+            int mid = (low + high + 1) / 2;
+
+            if (canCross(mid)) {
+                low = mid;
+            } else {
+                high = mid - 1;
+            }
+        }
+
+        System.out.println(low);
+
+        sc.close();
+    }
+}
